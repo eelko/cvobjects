@@ -1,0 +1,4 @@
+To build run:
+
+cmake ../src
+make

@@ -68,6 +68,7 @@ public:
     
     virtual void push_back(IPC* ipc);
     virtual void pop_back();
+    virtual IPC* back();
     // virtual string parameterString();
     virtual void process();
     virtual std::string getXML();  

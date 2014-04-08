@@ -128,7 +128,7 @@ public:
         if (!_param.empty()){
             TiXmlDocument doc(name);
             doc.Parse(getXML().c_str());
-            doc.Print();
+            // doc.Print();
             doc.SaveFile();
         }
         return true;
@@ -144,7 +144,7 @@ public:
         if (!_param.empty()){
             TiXmlDocument doc(name);
             doc.LoadFile();
-            doc.Print();
+            // doc.Print();
             stringstream xmlString;
             xmlString << doc;
             logDeb( "xmlString from load = " << xmlString.str());

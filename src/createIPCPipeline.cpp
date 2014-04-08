@@ -60,9 +60,27 @@ inline void changeImageContainer(IPC* &ipc, string identifier){
     delete ipc; 
     ipc = IPCGen::createIPC(identifier.c_str()); 
     ipc->load(ipc->getIdentifierString() + ".dat"); 
-    cout << identifier << " operation selected!" << endl;
+    cout <<  "\r" << identifier << " operation selected!                                                      " << flush;
 }
 
+string getHeader(){
+    stringstream header;
+    header << "Menu:" << endl; 
+    header << "m /t- Print this Menu!" << endl;
+    header << "q /t- Quit!" << endl; 
+    header << "0 /t- Idle IPC" << endl; 
+    header << "1 /t- Blur" << endl; 
+    header << "2 /t- Threshold" << endl; 
+    header << "3 /t- Laplace" << endl; 
+    header << "4 /t- Morphological Operation" << endl; 
+    header << "i /t- Insert current operation into pipeline" << endl; 
+    header << "e /t- Eject current operation from pipeline" << endl; 
+    header << "s /t- Save current pipeline (ctrl-tab to commandline to enter name)" << endl; 
+    header << "l /t- Load pipeline from file (ctrl-tab to commandline to enter name)" << endl; 
+    header << "w /t- Print current pipeline XML string" << endl; 
+    return header.str();
+    
+}
 int main(int argc, char* argv[])
 {
 	//basic variables
@@ -118,7 +136,7 @@ int main(int argc, char* argv[])
     cvMoveWindow( "inputImage", 0 , 0 );
     cvMoveWindow( "outputImage", 1000 , 0 );
     
-    
+    cout << getHeader() << endl;
     
 //-----------------------------------------------------------------------------------------------------------------------------------------------------//
     //the main loop
@@ -128,10 +146,11 @@ int main(int argc, char* argv[])
         c = (char)cv::waitKey( 1 );
       
         if( c == 'q' ){ cout << "quitting!" << endl; break; } //quit
+        if( c == 'm' ){ cout << getHeader() << endl;} 
 
             /*special features*/
         if( c == 't' ){
-            cout << "Tuning Mode! " << endl;
+            cout << "\nTuning Mode! " << endl;
             ipc->interactiveTune(100,100);
             ipc->save(ipc->getIdentifierString() + ".dat");
             cout << "Done Tuning. Saved parameters as " << ipc->getIdentifierString() + ".dat" << endl;
@@ -140,31 +159,33 @@ int main(int argc, char* argv[])
 
             /*pipeline functionality*/
         if( c == 'i' ){  
-            cout << "Adding container to pipeline..." << endl;
+            cout << "\rAdding " << ipc->getIdentifierString() << " operation to pipeline...                         " << endl;
             IPC* newIPC = IPCGen::createIPC(ipc->getIdentifierString());
             newIPC->load(ipc->getIdentifierString() + ".dat");
             ipp->push_back(newIPC);
             pipelineImage = ipp->outputImage();
+            cout << "\rAdded " << ipc->getIdentifierString() << " operation to pipeline...                          " << endl;
             changeImageContainer(ipc,"idle");
         } 
         if( c == 'e' ){  
+            cout << "\rRemoved " << ipp->back()->getIdentifierString() << " operation to pipeline...                         " << endl;
             ipp->pop_back();
             pipelineImage = ipp->outputImage();
         } 
         if( c == 's' ){  
-             cout << "Save pipeline as:" << flush;
+             cout << "\n Save pipeline as:                                                                      " << flush;
              string pipelinename;
              cin >> pipelinename;
              ipp->save(pipelinename);
         } 
         if( c == 'l' ){  
-            cout << "Load pipeline:" << flush;
+            cout << "\nLoad pipeline:                                                                             " << flush;
             string pipelinename;
             cin >> pipelinename;
             ipp->load(pipelinename);
         } 
         if( c == 'w' ){  
-            cout << "Pipeline contents:" << endl;
+            cout << "\n Pipeline contents:" << endl;
             cout << ipp->getXML() << endl;
         } 
 

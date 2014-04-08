@@ -49,6 +49,16 @@ void IPCPipeline::pop_back(){
      
 }
 
+IPC* IPCPipeline::back(){
+    if (_container.size()>0){
+        return _container.back();
+    } else {
+        return this;
+    }
+    
+     
+}
+
 std::string IPCPipeline::getXML()            
 {
     stringstream xml;

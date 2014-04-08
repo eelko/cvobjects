@@ -56,11 +56,13 @@ public:
     */
     virtual std::string getXML()            
     {   stringstream xml;
-        xml << "<" << _identifyerString << ">";
-        for (std::map<std::string, DoubleParameter*>::iterator it = _param.begin(); it != _param.end() ; it++){
-                  xml << (it->second)->getXML();
-              }
-        xml << "</" << _identifyerString << ">";
+        if (!_param.empty()){
+            xml << "<" << _identifyerString << ">";
+            for (std::map<std::string, DoubleParameter*>::iterator it = _param.begin(); it != _param.end() ; it++){
+                      xml << (it->second)->getXML();
+                  }
+            xml << "</" << _identifyerString << ">";
+        }
         return string(xml.str());
     };
 
@@ -122,12 +124,13 @@ public:
     */
     virtual bool save(const std::string& name)
     {   
-        
         logDeb("IPC Save called...");
-        TiXmlDocument doc(name);
-        doc.Parse(getXML().c_str());
-        doc.Print();
-        doc.SaveFile();
+        if (!_param.empty()){
+            TiXmlDocument doc(name);
+            doc.Parse(getXML().c_str());
+            doc.Print();
+            doc.SaveFile();
+        }
         return true;
     }
 
@@ -138,13 +141,15 @@ public:
     virtual bool load(const std::string& name)
     {
         logDeb( "IPC Load called...");
-        TiXmlDocument doc(name);
-        doc.LoadFile();
-        doc.Print();
-        stringstream xmlString;
-        xmlString << doc;
-        logDeb( "xmlString from load = " << xmlString.str());
-        setXML(xmlString.str());
+        if (!_param.empty()){
+            TiXmlDocument doc(name);
+            doc.LoadFile();
+            doc.Print();
+            stringstream xmlString;
+            xmlString << doc;
+            logDeb( "xmlString from load = " << xmlString.str());
+            setXML(xmlString.str());
+        }
         return true;
     }
 

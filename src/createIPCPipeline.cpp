@@ -56,6 +56,13 @@ inline bool openVidoCamera(cv::VideoCapture& cap){
     return true;
 }
 
+inline void changeImageContainer(IPC* &ipc, string identifier){
+    delete ipc; 
+    ipc = IPCGen::createIPC(identifier.c_str()); 
+    ipc->load(ipc->getIdentifierString() + ".dat"); 
+    cout << identifier << " operation selected!" << endl;
+}
+
 int main(int argc, char* argv[])
 {
 	//basic variables
@@ -138,10 +145,7 @@ int main(int argc, char* argv[])
             newIPC->load(ipc->getIdentifierString() + ".dat");
             ipp->push_back(newIPC);
             pipelineImage = ipp->outputImage();
-            delete ipc; 
-            ipc = new IPC(); 
-            ipc->inputImage(pipelineImage); 
-            cout << " Idle operation selected!" << endl;
+            changeImageContainer(ipc,"idle");
         } 
         if( c == 'e' ){  
             ipp->pop_back();
@@ -181,13 +185,11 @@ int main(int argc, char* argv[])
 
 
             /*choose output*/
-        if( c == '0' ){ delete ipc; ipc = new IPC(); ipc->inputImage(pipelineImage); cout << " Idle operation selected!" << endl;}//
-        if( c == '1' ){ delete ipc; ipc = IPCGen::createIPC("GaussianBlurIsotropic"); ipc->load(ipc->getIdentifierString() + ".dat"); ipc->inputImage(pipelineImage); cout << " GaussianBlurIsotropic operation selected!" << endl;}//
-        if( c == '2' ){ delete ipc; ipc = IPCGen::createIPC("Threshold"); ipc->load(ipc->getIdentifierString() + ".dat"); ipc->inputImage(pipelineImage); cout << " Threshold operation selected!" << endl;}//
-        if( c == '3' ){ delete ipc; ipc = IPCGen::createIPC("Laplacian"); ipc->load(ipc->getIdentifierString() + ".dat"); ipc->inputImage(pipelineImage); cout << " Laplacian operation selected!" << endl;}//
-        if( c == '4' ){ delete ipc; ipc = IPCGen::createIPC("MorphologyEx"); ipc->load(ipc->getIdentifierString() + ".dat");;ipc->inputImage(pipelineImage); cout << " MorphologyEx operation selected!" << endl;}//
-
-
+        if( c == '0' ){ changeImageContainer(ipc,"idle");}//
+        if( c == '1' ){ changeImageContainer(ipc,"GaussianBlurIsotropic");}//
+        if( c == '2' ){ changeImageContainer(ipc,"Threshold");}//
+        if( c == '3' ){ changeImageContainer(ipc,"Laplacian");}//
+        if( c == '4' ){ changeImageContainer(ipc,"MorphologyEx");}//
 
         ipc->inputImage(pipelineImage);
         ipc->process();

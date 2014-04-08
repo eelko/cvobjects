@@ -32,7 +32,7 @@ public:
                 //if ( identifyerString == "?")  return new HoughCircles();
                 if ( identifyerString == "MorphologyEx")  return new MorphologyEx();
                 //if ( identifyerString == "?")  return (IPC*) new Mask();
-        return NULL;
+        return new IPC();
     }
 
 

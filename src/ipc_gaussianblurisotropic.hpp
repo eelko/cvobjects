@@ -20,7 +20,6 @@ class GaussianBlurIsotropic : public IPC
 public:
     GaussianBlurIsotropic(){
         _identifyerString = "GaussianBlurIsotropic";
-        _type = IP_BLUR;
         
         _param["kernelSize"] = new DoubleParameter(10,1,255,1,"kernelSize");
         _param["standardDeviation"]  = new DoubleParameter(0,0,100,0.1,"standardDeviation");

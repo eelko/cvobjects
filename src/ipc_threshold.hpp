@@ -30,7 +30,6 @@ public:
         _param["type"]  = new DoubleParameter(3,0,4,1,"type");
         
         _identifyerString = "Threshold";
-        _type = IP_THRESHOLD;
     };
     virtual ~Threshold(){};   
 

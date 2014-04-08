@@ -31,7 +31,6 @@ public:
         _param["borderType"] = new DoubleParameter(cv::BORDER_DEFAULT,cv::BORDER_DEFAULT,cv::BORDER_DEFAULT,1,"borderType");
         
         _identifyerString = "Laplacian";
-        _type = IP_LAPLACE;
     };
     virtual ~Laplacian(){};   
     

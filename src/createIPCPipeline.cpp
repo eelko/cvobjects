@@ -60,10 +60,12 @@ int main(int argc, char* argv[])
 {
 	//basic variables
 	int rows, cols;
-    Image_Processing_Type operation;
+    
+    
+    // Image_Processing_Type operation;
 	string imageFileName;
 	cv::Mat inputImage;
-	cv::Mat processedImage(inputImage);
+	cv::Mat pipelineImage(inputImage);
 	cv::Mat outputImage(inputImage);
     cv::VideoCapture cap;
  
@@ -88,25 +90,18 @@ int main(int argc, char* argv[])
     }
     outputImage = inputImage.clone();
 
-    vector<IPC*> displayOperation(IP_COUNT);
-    
-    for (Image_Processing_Type i = IP_NONE; i < IP_COUNT ; i++){
-        displayOperation[i] = IPCGen::createIPC(i);
-    }
-
-    //for all operations do:
-    for (vector<IPC*>::iterator it = displayOperation.begin(); it != displayOperation.end() ; it++){
-        if(*it != NULL){
-            (*it)->load((*it)->getIdentifierString() + ".dat");
-            cout << (*it)->getIdentifierString() + ".dat" << ":\n" << (*it)->getXML() << endl;
-        }
-    }
-
     //create the pipeline
     IPCPipeline* ipp = new IPCPipeline();
     ipp->inputImage(inputImage);
     ipp->process();
-    processedImage = ipp->outputImage();
+    pipelineImage = ipp->outputImage();
+
+    //create an Image Processing Container, that connects to the output of the pipeline
+    IPC* ipc = new IPC();
+    ipc->inputImage(pipelineImage);
+    ipc->process();
+    outputImage = ipc->outputImage();
+
 
     //create windows
     imshow("inputImage", inputImage);
@@ -127,44 +122,36 @@ int main(int argc, char* argv[])
       
         if( c == 'q' ){ cout << "quitting!" << endl; break; } //quit
 
-            /*choose input*/
-        //if the dimension change the application crashes
-        // if( c == 'f' ){ cap.release(); if (readImageFromDisk(inputImage, imageFileName)){sourceMode = SM_FILE;} else {sourceMode = SM_IDLE;cout << "idle sourceMode " << endl;}}// use image file from disk
-        // if( c == 'c' ){ if (openVidoCamera(cap)){sourceMode = SM_CAMERA;cout << "camera mode " << endl;} else {sourceMode = SM_IDLE;cout << "idle mode " << endl;}}// use webcam
-        // if( c == 'i' ){  cap.release(); sourceMode = SM_IDLE; cout << "idle mode " << endl;}//
-
             /*special features*/
         if( c == 't' ){
-            if( operation == IP_NONE){cout << "No output filter selected! " << endl;}
-            else{
-                cout << "Tuning Mode! " << endl;
-                displayOperation[operation]->interactiveTune(100,100);
-                displayOperation[operation]->save(displayOperation[operation]->getIdentifierString() + ".dat");
-                cout << "Done Tuning. Saved parameters as " << displayOperation[operation]->getIdentifierString() + ".dat" << endl;
-            }
+            cout << "Tuning Mode! " << endl;
+            ipc->interactiveTune(100,100);
+            ipc->save(ipc->getIdentifierString() + ".dat");
+            cout << "Done Tuning. Saved parameters as " << ipc->getIdentifierString() + ".dat" << endl;
+            
         } 
 
             /*pipeline functionality*/
         if( c == 'i' ){  
-            if( operation == IP_NONE){cout << "No output filter selected! " << endl;}
-            else{
-                cout << "Adding container to pipeline..." << endl;
-                IPC* pipelineCandidate = IPCGen::createIPC(operation);
-                pipelineCandidate->load(displayOperation[operation]->getIdentifierString() + ".dat");
-                ipp->push_back(pipelineCandidate);
-                processedImage = ipp->outputImage();
-                operation = IP_NONE;
-            }
+            cout << "Adding container to pipeline..." << endl;
+            IPC* newIPC = IPCGen::createIPC(ipc->getIdentifierString());
+            newIPC->load(ipc->getIdentifierString() + ".dat");
+            ipp->push_back(newIPC);
+            pipelineImage = ipp->outputImage();
+            delete ipc; 
+            ipc = new IPC(); 
+            ipc->inputImage(pipelineImage); 
+            cout << " Idle operation selected!" << endl;
         } 
         if( c == 'e' ){  
             ipp->pop_back();
-            processedImage = ipp->outputImage();
+            pipelineImage = ipp->outputImage();
         } 
         if( c == 's' ){  
              cout << "Save pipeline as:" << flush;
              string pipelinename;
              cin >> pipelinename;
-            ipp->save(pipelinename);
+             ipp->save(pipelinename);
         } 
         if( c == 'l' ){  
             cout << "Load pipeline:" << flush;
@@ -172,15 +159,12 @@ int main(int argc, char* argv[])
             cin >> pipelinename;
             ipp->load(pipelinename);
         } 
+        if( c == 'w' ){  
+            cout << "Pipeline contents:" << endl;
+            cout << ipp->getXML() << endl;
+        } 
 
-
-
-            /*choose output*/
-        if( c == '0' ){ operation = IP_NONE; cout << " Idle operation selected!" << endl;}//
-        
-        if( atoi(&c) > 0 && atoi(&c) < IP_COUNT )
-            { operation = (Image_Processing_Type)atoi(&c); cout << " Operation " << displayOperation[operation]->getIdentifierString() << " selected!" << endl; }//
-
+  
 //-----------------------------------------------------------------------------------------------------------------------------------------------------//
         /* process input image */
         if (sourceMode == SM_FILE){
@@ -191,18 +175,24 @@ int main(int argc, char* argv[])
 //-----------------------------------------------------------------------------------------------------------------------------------------------------//
         /* process pipline */
         ipp->process();
-        processedImage = ipp->outputImage();
+        pipelineImage = ipp->outputImage();
 //-----------------------------------------------------------------------------------------------------------------------------------------------------//
-        /* process output  image */
-        if( operation == IP_NONE){
-            outputImage = processedImage;          
-        }
-        else{
-            displayOperation[operation]->inputImage(processedImage);
-            displayOperation[operation]->process();
-            outputImage = displayOperation[operation]->outputImage();          
-            
-        }       
+        /* process ipc */
+
+
+            /*choose output*/
+        if( c == '0' ){ delete ipc; ipc = new IPC(); ipc->inputImage(pipelineImage); cout << " Idle operation selected!" << endl;}//
+        if( c == '1' ){ delete ipc; ipc = IPCGen::createIPC("GaussianBlurIsotropic"); ipc->load(ipc->getIdentifierString() + ".dat"); ipc->inputImage(pipelineImage); cout << " GaussianBlurIsotropic operation selected!" << endl;}//
+        if( c == '2' ){ delete ipc; ipc = IPCGen::createIPC("Threshold"); ipc->load(ipc->getIdentifierString() + ".dat"); ipc->inputImage(pipelineImage); cout << " Threshold operation selected!" << endl;}//
+        if( c == '3' ){ delete ipc; ipc = IPCGen::createIPC("Laplacian"); ipc->load(ipc->getIdentifierString() + ".dat"); ipc->inputImage(pipelineImage); cout << " Laplacian operation selected!" << endl;}//
+        if( c == '4' ){ delete ipc; ipc = IPCGen::createIPC("MorphologyEx"); ipc->load(ipc->getIdentifierString() + ".dat");;ipc->inputImage(pipelineImage); cout << " MorphologyEx operation selected!" << endl;}//
+
+
+
+        ipc->inputImage(pipelineImage);
+        ipc->process();
+        outputImage = ipc->outputImage();
+
  //-----------------------------------------------------------------------------------------------------------------------------------------------------//
         
         /* display windows */
@@ -219,13 +209,8 @@ int main(int argc, char* argv[])
     cvDestroyWindow("inputImage");
     cvDestroyWindow("outputImage");
     delete ipp;
-    for (vector<IPC*>::iterator it = displayOperation.begin(); it != displayOperation.end() ; it++){
-        if(*it != NULL){
-            delete *it;
-            *it = NULL;
-        }
-    }
-    
+    delete ipc;
+
 	return 0;
 };
 

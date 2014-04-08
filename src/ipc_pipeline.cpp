@@ -105,7 +105,7 @@ bool IPCPipeline::setXML(std::string xmlString){
 }         
 
 void IPCPipeline::process(){
-    logDeb("IPCPipeline process() called"); 
+    logDeb("IPCPipeline process() called, container size:" << _container.size()); 
     
     //initiate all the process functions of the containers in theis pipeline
     for (unsigned i=0; i<_container.size(); i++){
@@ -113,6 +113,7 @@ void IPCPipeline::process(){
         _container.at(i)->process();
         _result.at(i+1) = _container.at(i)->outputImage();
     }    
+
     return;
 };
 

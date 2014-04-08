@@ -5,7 +5,7 @@
 
 #ifndef __LOG_H__
 #define __LOG_H__
-// #define DEBUG
+//#define DEBUG
 #define INFO
 // #define BOOSTLOG
 // #ifdef BOOSTLOG

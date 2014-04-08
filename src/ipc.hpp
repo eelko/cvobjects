@@ -23,25 +23,7 @@ namespace ipc {
 
 
 
-/// Enumeration indicating container functionality.
-/**
-This Emuneration indicates the functionality of the image processing container.
-IP_NONE is reserverd for an empty container.
-IP_COUNT indicates the maximal number of available functionalities
-*/
-enum  Image_Processing_Type 
-{
-    IP_NONE = 0,
-    IP_BLUR,
-    IP_THRESHOLD,
-    // IP_COLORSEGMENTATION,
-    IP_LAPLACE,
-    // IP_CONTOURS,
-    // IP_HOUGHCIRCLES,
-    IP_MORPHOLOGYEX,
-    // IP_MASK,
-    IP_COUNT
-};    
+
     
 ///Base Image Processing Container Class
 /**
@@ -56,14 +38,13 @@ class IPC
 public:
     std::map<std::string, DoubleParameter*> _param; /// STL Map containing all the parameters of the IPC referenced by their indetifying string
 protected:
-    Image_Processing_Type _type;    ///< This enumeration identifies the object type.
     string _identifyerString;       ///< String identifying object type, used for file names and reporting.
     cv::Mat _inputImage;            ///< The standard location of the incomming images.
     cv::Mat _outputImage;           ///< The standard location of the outgoing images.
     
     //methods
 public:
-    IPC():_identifyerString("IPC"),_type(IP_NONE){}; //<We fill the identifyer enum and string during construction.
+    IPC():_identifyerString("IPC"){}; //<We fill the identifyer enum and string during construction.
 
     virtual ~IPC(){
         _param.clear();
@@ -74,8 +55,7 @@ public:
     The XML string can be used for saving, loading and manipulating the parameters.
     */
     virtual std::string getXML()            
-    {
-        stringstream xml;
+    {   stringstream xml;
         xml << "<" << _identifyerString << ">";
         for (std::map<std::string, DoubleParameter*>::iterator it = _param.begin(); it != _param.end() ; it++){
                   xml << (it->second)->getXML();
@@ -184,59 +164,58 @@ public:
     For process() to work, we need a valid inputImage. As a result a valid outputImage is created.
     */
     virtual void process(){
-        cerr << "The method process is not implemented for object \"" << _identifyerString << "\"..." << endl;
+        _outputImage = _inputImage;
         return;
     }
     
     void interactiveTune(int posX, int posY)
     {
-      cv::namedWindow( _identifyerString, cv::WINDOW_AUTOSIZE );
-      cv::moveWindow(_identifyerString, posX , posY );
+        if (!_param.empty()){
+        
+            cv::namedWindow( _identifyerString, cv::WINDOW_AUTOSIZE );
+            cv::moveWindow(_identifyerString, posX , posY );
       
       
-      std::map<std::string, DoubleParameter*>::iterator it = _param.begin();
-      std::map<std::string, DoubleParameter*>::iterator itEnd;
+            std::map<std::string, DoubleParameter*>::iterator it = _param.begin();
+            std::map<std::string, DoubleParameter*>::iterator itEnd;
       
-      for(;;){
-       int c = (char)cv::waitKey( IPC_wait_key_period );
+            for(;;){
+             int c = (char)cv::waitKey( IPC_wait_key_period );
     
-       if( c == 27 ){ break; } //esc
-       if( c == 'n' )
-       {
-           itEnd = _param.end();
-           if ((it != _param.end()) && (it != --itEnd)){
-               it++;
-           }
-       }
-       if( c == 'p' )
-       {
-           if (it != _param.begin()){
-               it--;
-           }
-       }
+             if( c == 27 ){ break; } //esc
+             if( c == 'n' )
+             {
+                 itEnd = _param.end();
+                 if ((it != _param.end()) && (it != --itEnd)){
+                     it++;
+                 }
+             }
+             if( c == 'p' )
+             {
+                 if (it != _param.begin()){
+                     it--;
+                 }
+             }
            
-       if( c == '+' ){ it->second->incr(); }//
-       if( c == '-' ){ it->second->decr(); }//
+             if( c == '+' ){ it->second->incr(); }//
+             if( c == '-' ){ it->second->decr(); }//
     
     
-       cout << "\r" << _identifyerString << "[" << it->first << "] = " << it->second->get() << "            " <<flush;
+             cout << "\r" << _identifyerString << "[" << it->first << "] = " << it->second->get() << "            " <<flush;
        
-       process();
+             process();
        
-       if (_outputImage.data)
-           cv::imshow(_identifyerString, _outputImage);
-     }
-     //cleanup
-     cout << endl;
-      cv::destroyWindow(_identifyerString);
-     return;
-    };
-    
-    /// Get the identifying string from this object.
-    string getIdentifierString(){return _identifyerString;};
-    
-    /// Get the object type enumeration.
-    Image_Processing_Type type(){return _type;};
+             if (_outputImage.data)
+                 cv::imshow(_identifyerString, _outputImage);
+           }
+           //cleanup
+           cout << endl;
+            cv::destroyWindow(_identifyerString);
+           return;
+          }
+      }; 
+      /// Get the identifying string from this object.
+      string getIdentifierString(){return _identifyerString;};    
 };
 
 

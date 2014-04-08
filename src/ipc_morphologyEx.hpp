@@ -31,7 +31,6 @@ public:
         _param["element"] = new DoubleParameter(0,0,2,1,"element");
         
         _identifyerString = "MorphologyEx";
-        _type = IP_MORPHOLOGYEX;
     };
     virtual ~MorphologyEx(){};   
 

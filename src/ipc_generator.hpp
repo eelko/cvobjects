@@ -36,23 +36,6 @@ public:
     }
 
 
-    static IPC* createIPC(Image_Processing_Type op){
-            switch(op)
-            {
-    
-                case IP_NONE:                return NULL;
-                case IP_LAPLACE:             return new Laplacian();
-                case IP_BLUR:                return (IPC*) new GaussianBlurIsotropic();
-                // case IP_COLORSEGMENTATION:   return new ColorSegmentHSV();
-                case IP_THRESHOLD:           return new Threshold();
-                // case IP_CONTOURS:            return new FindContours();
-                // case IP_HOUGHCIRCLES:        return new HoughCircles();
-                case IP_MORPHOLOGYEX:        return new MorphologyEx();
-                // case IP_MASK:                return (IPC*) new Mask();
-                case IP_COUNT:               return NULL;
-            }
-        return NULL;
-    }
 };
 }//namespace ipc
 

@@ -26,7 +26,7 @@ public:
     static IPC* createIPC(string identifyerString){
                 if ( identifyerString == "Laplacian")  return new Laplacian();
                 if ( identifyerString == "GaussianBlurIsotropic")  return (IPC*) new GaussianBlurIsotropic();
-                //if ( identifyerString == "?")  return new ColorSegmentHSV();
+                if ( identifyerString == "ColorSegmentHSV")  return new ColorSegmentHSV();
                 if ( identifyerString == "Threshold")  return new Threshold();
                 //if ( identifyerString == "?")  return new FindContours();
                 //if ( identifyerString == "?")  return new HoughCircles();

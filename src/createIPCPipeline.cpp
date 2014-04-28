@@ -66,18 +66,19 @@ inline void changeImageContainer(IPC* &ipc, string identifier){
 string getHeader(){
     stringstream header;
     header << "Menu:" << endl; 
-    header << "m /t- Print this Menu!" << endl;
-    header << "q /t- Quit!" << endl; 
-    header << "0 /t- Idle IPC" << endl; 
-    header << "1 /t- Blur" << endl; 
-    header << "2 /t- Threshold" << endl; 
-    header << "3 /t- Laplace" << endl; 
-    header << "4 /t- Morphological Operation" << endl; 
-    header << "i /t- Insert current operation into pipeline" << endl; 
-    header << "e /t- Eject current operation from pipeline" << endl; 
-    header << "s /t- Save current pipeline (ctrl-tab to commandline to enter name)" << endl; 
-    header << "l /t- Load pipeline from file (ctrl-tab to commandline to enter name)" << endl; 
-    header << "w /t- Print current pipeline XML string" << endl; 
+    header << "m \t- Print this Menu!" << endl;
+    header << "q \t- Quit!" << endl; 
+    header << "0 \t- Idle IPC" << endl; 
+    header << "1 \t- Blur" << endl; 
+    header << "2 \t- Threshold" << endl; 
+    header << "3 \t- Laplace" << endl; 
+    header << "4 \t- Morphological Operation" << endl; 
+    header << "5 \t- Color Segmentation HSV" << endl; 
+    header << "i \t- Insert current operation into pipeline" << endl; 
+    header << "e \t- Eject current operation from pipeline" << endl; 
+    header << "s \t- Save current pipeline (ctrl-tab to commandline to enter name)" << endl; 
+    header << "l \t- Load pipeline from file (ctrl-tab to commandline to enter name)" << endl; 
+    header << "w \t- Print current pipeline XML string" << endl; 
     return header.str();
     
 }
@@ -159,7 +160,6 @@ int main(int argc, char* argv[])
 
             /*pipeline functionality*/
         if( c == 'i' ){  
-            cout << "\rAdding " << ipc->getIdentifierString() << " operation to pipeline...                         " << endl;
             IPC* newIPC = IPCGen::createIPC(ipc->getIdentifierString());
             newIPC->load(ipc->getIdentifierString() + ".dat");
             ipp->push_back(newIPC);
@@ -168,7 +168,7 @@ int main(int argc, char* argv[])
             changeImageContainer(ipc,"idle");
         } 
         if( c == 'e' ){  
-            cout << "\rRemoved " << ipp->back()->getIdentifierString() << " operation to pipeline...                         " << endl;
+            cout << "\rRemoved " << ipp->back()->getIdentifierString() << " operation from pipeline...                         " << endl;
             ipp->pop_back();
             pipelineImage = ipp->outputImage();
         } 
@@ -211,6 +211,7 @@ int main(int argc, char* argv[])
         if( c == '2' ){ changeImageContainer(ipc,"Threshold");}//
         if( c == '3' ){ changeImageContainer(ipc,"Laplacian");}//
         if( c == '4' ){ changeImageContainer(ipc,"MorphologyEx");}//
+        if( c == '5' ){ changeImageContainer(ipc,"ColorSegmentHSV");}//
 
         ipc->inputImage(pipelineImage);
         ipc->process();

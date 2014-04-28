@@ -203,6 +203,7 @@ public:
              }
            
              if( c == '+' ){ it->second->incr(); }//
+             if( c == '=' ){ it->second->incr(); }//
              if( c == '-' ){ it->second->decr(); }//
     
     

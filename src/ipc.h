@@ -9,7 +9,7 @@
 #include "ipc.hpp"
 #include "ipc_laplacian.hpp"
 #include "ipc_gaussianblurisotropic.hpp"
-// #include "ipc_colorsegmenthsv.hpp"
+#include "ipc_colorsegmenthsv.hpp"
 #include "ipc_threshold.hpp"
 // #include "ipc_findcontours.hpp"
 // #include "ipc_houghcircles.hpp"

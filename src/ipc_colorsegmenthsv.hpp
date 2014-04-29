@@ -101,6 +101,9 @@ public:
                cv::merge(_bin, _outputImage);
            }
            else if(_param["_MASK_MODE"]->get()==1){
+               //reset output image to prevent masking effect
+               _outputImage = cv::Mat::zeros(_inputImage.rows, _inputImage.cols, CV_8UC3);
+               //create a ...
                cv::Mat _grayImage;
                cvtColor( _inputImage, _grayImage, CV_RGB2GRAY );
            

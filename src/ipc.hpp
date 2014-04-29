@@ -7,8 +7,8 @@
 #ifndef __IMAGEPROCESSINGCONTAINER__HPP__
 #define __IMAGEPROCESSINGCONTAINER__HPP__
 
-#include <cv.h>
-#include <highgui.h>
+#include <opencv.hpp>
+#include <highgui/highgui.hpp>
 #include <iostream>
 #include <fstream>
 #include "log.h"
@@ -178,7 +178,7 @@ public:
         if (!_param.empty()){
         
             cv::namedWindow( _identifyerString, cv::WINDOW_AUTOSIZE );
-            cv::moveWindow(_identifyerString, posX , posY );
+            //cv::moveWindow(_identifyerString, posX , posY );
       
       
             std::map<std::string, DoubleParameter*>::iterator it = _param.begin();

@@ -7,8 +7,8 @@
 #ifndef __IMAGEPROCESSINGCONTAINER__HPP__
 #define __IMAGEPROCESSINGCONTAINER__HPP__
 
-#include <opencv.hpp>
-#include <highgui/highgui.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <fstream>
 #include "log.h"

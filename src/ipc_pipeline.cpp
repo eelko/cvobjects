@@ -12,7 +12,7 @@
 #include <string>
 #include <sstream>
 
-#include <opencv.hpp>
+#include <opencv2/opencv.hpp>
 
 #include "log.h"
 #include "ipc_pipeline.h"

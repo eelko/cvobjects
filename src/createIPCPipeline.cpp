@@ -74,7 +74,9 @@ string getHeader(){
     header << "3 \t- Laplace" << endl; 
     header << "4 \t- Morphological Operation" << endl; 
     header << "5 \t- Color Segmentation HSV" << endl; 
-    header << "i \t- Insert current operation into pipeline" << endl; 
+	header << "-----------------------------" << endl; 
+	header << "t \t- Tune specific settings of the selected filter" << endl; 
+	header << "i \t- Insert current operation into pipeline" << endl; 
     header << "e \t- Eject current operation from pipeline" << endl; 
     header << "s \t- Save current pipeline (ctrl-tab to commandline to enter name)" << endl; 
     header << "l \t- Load pipeline from file (ctrl-tab to commandline to enter name)" << endl; 
@@ -151,7 +153,8 @@ int main(int argc, char* argv[])
 
             /*special features*/
         if( c == 't' ){
-            cout << "\nTuning Mode! " << endl;
+            cout << "Tuning Mode: ";
+			cout << "use \'p\' and \'n\' to select operation and \'+\' and \'-\'to adjust the value" << endl;
             ipc->interactiveTune(100,100);
             ipc->save(ipc->getIdentifierString() + ".dat");
             cout << "Done Tuning. Saved parameters as " << ipc->getIdentifierString() + ".dat" << endl;

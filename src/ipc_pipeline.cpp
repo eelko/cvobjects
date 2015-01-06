@@ -127,47 +127,4 @@ void IPCPipeline::process(){
     return;
 };
 
-// void IPCPipeline::interactiveTune(int posX, int posY){
-//     cv::namedWindow( _identifyerString, cv::WINDOW_AUTOSIZE );
-//     cv::moveWindow(_identifyerString, posX , posY );
-// 
-//     for(;;)
-//     {
-//         int c = (char)cv::waitKey( IPC_wait_key_period );
-// 
-//         if( c == 27 ){ break; }
-//         if( c == 'd' ){
-//             cout << "Dir name:" << flush;
-//             cin >> _dirname;
-//         }
-//         if( c == 'f' ){
-//             cout << "File name:" << flush;
-//             cin >> _filename;
-//         }
-//         if( c == 'l' ){
-//             load(_filename);
-//         }
-//         if( c == 's' ){
-//             save(_filename);
-//         }
-//     
-//     
-//     
-//         cout << "\r" << parameterString() << "            " <<flush;
-//         process();
-//     
-//         if (_outputImage.data)
-//             cv::imshow(_identifyerString, _outputImage);
-//       }
-//       //cleanup
-//       cout << endl;
-//        cv::destroyWindow(_identifyerString);
-//       return;    
-// }
-
-
-
-
-
-
 }//namespace ipc

@@ -24,6 +24,8 @@ using namespace std;
 using namespace ipc;
 using namespace cv;
 
+
+
 enum SourceMode
 {
     SM_FILE,
@@ -179,6 +181,7 @@ int main(int argc, char* argv[])
              cout << "\n Save pipeline as:                                                                      " << flush;
              string pipelinename;
              cin >> pipelinename;
+			 cout << "saving pipeline as: "<< pipelinename << endl;
              ipp->save(pipelinename);
         } 
         if( c == 'l' ){  

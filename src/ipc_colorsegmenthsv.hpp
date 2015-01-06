@@ -58,7 +58,6 @@ public:
 
     virtual ~ColorSegmentHSV(){} ;   
 
-
     /// Set the input image of an image processing container.
     void inputImage(cv::Mat inputImage){
             _inputImage = inputImage;
@@ -69,18 +68,14 @@ public:
             _composite[CR_RED] = cv::Mat(_inputImage.rows, _inputImage.cols, CV_8UC1);
             _composite[CR_GREEN] = cv::Mat(_inputImage.rows, _inputImage.cols, CV_8UC1);
             _composite[CR_BLUE] = cv::Mat(_inputImage.rows, _inputImage.cols, CV_8UC1);
-
         
             return;
     }
 
-
     void process(){
     
         if(_inputImage.channels()==3){
-    //        _outputImage = cv::Mat(_inputImage.rows, _inputImage.cols, CV_8UC3);
             cvtColor(_inputImage, _imageHSV, CV_BGR2HSV);
-            // _inputImage.copyTo(_imageHSV);
            //segment three (preselected) color ranges
            cv::inRange(        _imageHSV,
                                cv::Scalar(_param["RED_HUE_LOWER_LIMIT"]->get() ,_param["RED_SAT_LOWER_LIMIT"]->get() ,_param["RED_VAL_LOWER_LIMIT"]->get()),
@@ -106,13 +101,6 @@ public:
                //create a ...
                cv::Mat _grayImage;
                cvtColor( _inputImage, _grayImage, CV_RGB2GRAY );
-           
-               // 
-               // _grayImage.copyTo(_composite[CR_RED],_bin[CR_RED]);
-               // _grayImage.copyTo(_composite[CR_GREEN],_bin[CR_GREEN]);
-               // _grayImage.copyTo(_composite[CR_BLUE],_bin[CR_BLUE]);
-               // 
-               // cv::merge(_composite, _outputImage);
 
               cv::Mat maskImage(_inputImage.rows, _inputImage.cols, CV_8UC1);
               maskImage = _bin[CR_RED]+_bin[CR_GREEN]+_bin[CR_BLUE];
@@ -122,14 +110,8 @@ public:
         } else {
             cerr << _identifyerString << ".process() only works on color images!" << endl;
         }
-                        
         return;
     };
-
-
 };
-
-
-
 }//namespace ipc
 #endif //__IPC_COLORSEGMENTHSV_HPP

@@ -125,12 +125,10 @@ public:
     virtual bool save(const std::string& name)
     {   
         logDeb("IPC Save called...");
-        if (!_param.empty()){
-            TiXmlDocument doc(name);
-            doc.Parse(getXML().c_str());
-            // doc.Print();
-            doc.SaveFile();
-        }
+        TiXmlDocument doc(name);
+        doc.Parse(getXML().c_str());
+        doc.Print();
+        doc.SaveFile();
         return true;
     }
 
@@ -141,15 +139,13 @@ public:
     virtual bool load(const std::string& name)
     {
         logDeb( "IPC Load called...");
-        if (!_param.empty()){
-            TiXmlDocument doc(name);
-            doc.LoadFile();
-            // doc.Print();
-            stringstream xmlString;
-            xmlString << doc;
-            logDeb( "xmlString from load = " << xmlString.str());
-            setXML(xmlString.str());
-        }
+        TiXmlDocument doc(name);
+        doc.LoadFile();
+        // doc.Print();
+        stringstream xmlString;
+        xmlString << doc;
+        logDeb( "xmlString from load = " << xmlString.str());
+        setXML(xmlString.str());
         return true;
     }
 

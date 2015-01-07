@@ -14,7 +14,7 @@ PROJECT( ${LIB_NAME} )
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)  
 add_definitions( -DTIXML_USE_STL )
 INCLUDE_DIRECTORIES(TINYXMLDIR)
-add_library(${LIB_NAME} SHARED
+add_library(${LIB_NAME} STATIC
         ${TINYXMLDIR}/tinyxml.cpp
         ${TINYXMLDIR}/tinyxmlparser.cpp
         ${TINYXMLDIR}/tinystr.cpp

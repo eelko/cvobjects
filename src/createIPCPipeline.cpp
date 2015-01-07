@@ -44,7 +44,7 @@ inline bool readImageFromDisk(cv::Mat& inputImage, string imageFileName){
     if( !inputImage.data )
         return false;
     
-    cout <<"read " << imageFileName << "from disk..." << endl;
+    cout <<"read " << imageFileName << " from disk..." << endl;
     return true;
 }
 
@@ -96,6 +96,7 @@ int main(int argc, char* argv[])
 	string imageFileName; /// if we do not use the camera we have an imput image whith this name
 	string referenceFileName; /// if we want we can gif this image as a reference for image processing
 	cv::Mat inputImage;
+	cv::Mat referenceImage;
 	cv::Mat pipelineImage(inputImage);
 	cv::Mat outputImage(inputImage);
     cv::VideoCapture cap;
@@ -107,7 +108,7 @@ int main(int argc, char* argv[])
 	else{
     //some for statement that loops through the arguments
 		for(int i = 1; i < argc; i++){
-			cout << "argc = " << argc << " i=" << i << endl;
+	//		cout << "argc = " << argc << " i=" << i << endl;
 			string input = argv[i];
 			if (input == "-i" ){
 				if (i+1 < argc){
@@ -119,6 +120,8 @@ int main(int argc, char* argv[])
 				if (i+1 < argc){
 					referenceFileName = argv[i+1];
 					cout << "referencefilename: " << referenceFileName << endl;
+					if (!readImageFromDisk(referenceImage,referenceFileName))
+						cout << "could not read reference image!" << endl; 
 				}
 			}
 			else if (input == "-h" || input == "--help"){
@@ -128,6 +131,8 @@ int main(int argc, char* argv[])
 		}
 	}
 
+
+	//detect mode of operation
     if (readImageFromDisk(inputImage, imageFileName)){
         sourceMode = SM_FILE;
         cout << "file mode " << endl;

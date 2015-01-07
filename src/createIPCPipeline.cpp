@@ -93,20 +93,41 @@ int main(int argc, char* argv[])
     
     
     // Image_Processing_Type operation;
-	string imageFileName;
+	string imageFileName; /// if we do not use the camera we have an imput image whith this name
+	string referenceFileName; /// if we want we can gif this image as a reference for image processing
 	cv::Mat inputImage;
 	cv::Mat pipelineImage(inputImage);
 	cv::Mat outputImage(inputImage);
     cv::VideoCapture cap;
  
-	//check arguments
-	if (argc > 2){
-		printf("usage: %s [image_file] \n", argv[0]);
-		return 0;
-	} else if (argc == 2){
-    	imageFileName = argv[1];
+	//read arguments
+    if ( (argc <= 1) || (argv[argc-1] == NULL) ) {  // there is NO input...
+//			cout << "no arguments provided, argc = " << argc << " argv[argc-1]= " << argv[argc-1] <<  endl;
+    }
+	else{
+    //some for statement that loops through the arguments
+		for(int i = 1; i < argc; i++){
+			cout << "argc = " << argc << " i=" << i << endl;
+			string input = argv[i];
+			if (input == "-i" ){
+				if (i+1 < argc){
+					imageFileName = argv[i+1];
+					cout << "imagefilename: " << imageFileName << endl;
+				}
+			}
+			else if (input == "-r" ){
+				if (i+1 < argc){
+					referenceFileName = argv[i+1];
+					cout << "referencefilename: " << referenceFileName << endl;
+				}
+			}
+			else if (input == "-h" || input == "--help"){
+				cout << "usage: " << argv[0] << " [-i inputImage] [-r referenceImage]" << endl;
+				return 0;
+			}
+		}
 	}
-    
+
     if (readImageFromDisk(inputImage, imageFileName)){
         sourceMode = SM_FILE;
         cout << "file mode " << endl;

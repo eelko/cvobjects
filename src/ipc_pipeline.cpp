@@ -120,6 +120,7 @@ void IPCPipeline::process(){
     //initiate all the process functions of the containers in theis pipeline
     for (unsigned i=0; i<_container.size(); i++){
         _container.at(i)->inputImage(_result.at(i));
+        _container.at(i)->referenceImage(_referenceImage);
         _container.at(i)->process();
         _result.at(i+1) = _container.at(i)->outputImage();
     }    

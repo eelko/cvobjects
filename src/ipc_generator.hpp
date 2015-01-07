@@ -28,6 +28,7 @@ public:
                 if ( identifyerString == "GaussianBlurIsotropic")  return (IPC*) new GaussianBlurIsotropic();
                 if ( identifyerString == "ColorSegmentHSV")  return new ColorSegmentHSV();
                 if ( identifyerString == "Threshold")  return new Threshold();
+                if ( identifyerString == "Registration")  return new Registration();
                 //if ( identifyerString == "?")  return new FindContours();
                 //if ( identifyerString == "?")  return new HoughCircles();
                 if ( identifyerString == "MorphologyEx")  return new MorphologyEx();

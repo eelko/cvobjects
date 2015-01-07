@@ -40,6 +40,7 @@ public:
 protected:
     string _identifyerString;       ///< String identifying object type, used for file names and reporting.
     cv::Mat _inputImage;            ///< The standard location of the incomming images.
+    cv::Mat _referenceImage;        ///< The standard location of the reference images.
     cv::Mat _outputImage;           ///< The standard location of the outgoing images.
     
     //methods
@@ -152,6 +153,12 @@ public:
     /// Set the input image of an image processing container.
     virtual void inputImage(cv::Mat inputImage){
             _inputImage = inputImage;
+            return;
+    }
+
+    /// Set the reference image of an image processing container.
+    virtual void referenceImage(cv::Mat referenceImage){
+            _referenceImage = referenceImage;
             return;
     }
 

@@ -149,13 +149,15 @@ int main(int argc, char* argv[])
     //create the pipeline
     IPCPipeline* ipp = new IPCPipeline();
     ipp->inputImage(inputImage);
+	ipp->referenceImage(referenceImage);
     ipp->process();
     pipelineImage = ipp->outputImage();
 
     //create an Image Processing Container, that connects to the output of the pipeline
     IPC* ipc = new IPC();
     ipc->inputImage(pipelineImage);
-    ipc->process();
+	ipc->referenceImage(referenceImage);
+	ipc->process();
     outputImage = ipc->outputImage();
 
 
@@ -234,7 +236,7 @@ int main(int argc, char* argv[])
         ipp->process();
         pipelineImage = ipp->outputImage();
 //-----------------------------------------------------------------------------------------------------------------------------------------------------//
-        /* process ipc */
+        /* process container */
 
 
             /*choose output*/
@@ -244,8 +246,10 @@ int main(int argc, char* argv[])
         if( c == '3' ){ changeImageContainer(ipc,"Laplacian");}//
         if( c == '4' ){ changeImageContainer(ipc,"MorphologyEx");}//
         if( c == '5' ){ changeImageContainer(ipc,"ColorSegmentHSV");}//
+        if( c == '6' ){ changeImageContainer(ipc,"Registration");}//
 
         ipc->inputImage(pipelineImage);
+		ipc->referenceImage(referenceImage);
         ipc->process();
         outputImage = ipc->outputImage();
 

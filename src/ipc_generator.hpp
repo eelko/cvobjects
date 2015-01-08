@@ -29,7 +29,8 @@ public:
                 if ( identifyerString == "ColorSegmentHSV")  return new ColorSegmentHSV();
                 if ( identifyerString == "Threshold")  return new Threshold();
                 if ( identifyerString == "Registration")  return new Registration();
-                //if ( identifyerString == "?")  return new FindContours();
+                if ( identifyerString == "Houghlines")  return new Houghlines();
+                if ( identifyerString == "Canny")  return new Canny();
                 //if ( identifyerString == "?")  return new HoughCircles();
                 if ( identifyerString == "MorphologyEx")  return new MorphologyEx();
                 //if ( identifyerString == "?")  return (IPC*) new Mask();

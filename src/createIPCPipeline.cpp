@@ -75,7 +75,10 @@ string getHeader(){
     header << "2 \t- Threshold" << endl; 
     header << "3 \t- Laplace" << endl; 
     header << "4 \t- Morphological Operation" << endl; 
-    header << "5 \t- Color Segmentation HSV" << endl; 
+    header << "5 \t- Canny edge detector" << endl; 
+    header << "6 \t- Houghlines" << endl; 
+    header << "7 \t- Color Segmentation HSV" << endl; 
+    header << "r \t- Registrarion" << endl; 
 	header << "-----------------------------" << endl; 
 	header << "t \t- Tune specific settings of the selected filter" << endl; 
 	header << "i \t- Insert current operation into pipeline" << endl; 
@@ -245,8 +248,10 @@ int main(int argc, char* argv[])
         if( c == '2' ){ changeImageContainer(ipc,"Threshold");}//
         if( c == '3' ){ changeImageContainer(ipc,"Laplacian");}//
         if( c == '4' ){ changeImageContainer(ipc,"MorphologyEx");}//
-        if( c == '5' ){ changeImageContainer(ipc,"ColorSegmentHSV");}//
-        if( c == '6' ){ changeImageContainer(ipc,"Registration");}//
+        if( c == '5' ){ changeImageContainer(ipc,"Canny");}//
+        if( c == '6' ){ changeImageContainer(ipc,"Houghlines");}//
+        if( c == '7' ){ changeImageContainer(ipc,"ColorSegmentHSV");}//
+        if( c == 'r' ){ changeImageContainer(ipc,"Registration");}//
 
         ipc->inputImage(pipelineImage);
 		ipc->referenceImage(referenceImage);
